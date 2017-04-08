@@ -89,6 +89,16 @@ class CommandBuilder:
             for pair in ports:
                 self.__command += '-v ' + pair + ' '
 
+    def link(self, value):
+        """
+        Sets container linking.
+        :param value: List of selected items.
+        :return: 
+        """
+        if value.__len__() > 0:
+            for item in value:
+                self.__command += '--link ' + item.text() + ' '
+
     @property
     def command(self):
         return self.__command

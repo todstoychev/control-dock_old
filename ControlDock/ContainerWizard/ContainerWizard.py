@@ -10,6 +10,7 @@ from ControlDock.ContainerWizard.Pages.ContainerStartOptions import ContainerSta
 from ControlDock.ContainerWizard.Pages.FileSystem import FileSystem
 from ControlDock.ContainerWizard.Pages.Network import Network
 from ControlDock.ContainerWizard.Pages.Result import Result
+from ControlDock.ContainerWizard.Pages.LinkContainers import LinkContainers
 
 
 class ContainerWizard(QWizard):
@@ -24,6 +25,7 @@ class ContainerWizard(QWizard):
         command_builder (CommandBuilder): Command builder.
         network (Network): Network settings page.
         filesystem (FileSystem): Filesystem mappings.
+        link_containers (LinkContainers): Link containers page.
         result (Result): Result page."""
 
     image_id = ''
@@ -34,6 +36,7 @@ class ContainerWizard(QWizard):
     command_builder = None
     network = None
     filesystem = None
+    link_containers = None
     result = None
 
     def __init__(self, row):
@@ -54,17 +57,20 @@ class ContainerWizard(QWizard):
         self.__repository = row['repository']
         self.__tag = row['tag']
         self.result = Result()
+        self.link_containers = LinkContainers()
 
     def create_ui(self):
         """Creates UI."""
         self.addPage(self.container_identification)
         self.addPage(self.network)
         self.addPage(self.filesystem)
+        self.addPage(self.link_containers)
         self.addPage(self.command_preview)
         self.addPage(self.result)
         self.container_identification.create_page(self.__repository, self.__tag)
         self.network.create_page()
         self.filesystem.create_page()
+        self.link_containers.create_page()
         self.command_preview.create_page()
 
         # Define slots
@@ -85,6 +91,7 @@ class ContainerWizard(QWizard):
             self.command_builder.host_name(self.container_identification.host_name_field.text())
             self.command_builder.ports(self.network.port_mappings.toPlainText())
             self.command_builder.filesystem(self.filesystem.filesystem_mappings.toPlainText())
+            self.command_builder.link(self.link_containers.available_containers_dropdown.selectedItems())
 
             self.command_preview.set_command(
                 self.command_builder.build_command(self.image_id, self.__repository, self.__tag)
