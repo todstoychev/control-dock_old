@@ -90,7 +90,7 @@ class ContainersList(QWidget):
     def on_refresh_button_clicked(self):
         self.setCursor(QCursor(Qt.BusyCursor))
         app = QApplication.instance()
-        self.__table.setup_table()
+        self.__table.setup_table(self.__show_all_checkbox.isChecked())
         app.processEvents()
         self.setCursor(QCursor(Qt.ArrowCursor))
         ApplicationStatusBox.prepend_status_text('Containers list refreshed. \n')
