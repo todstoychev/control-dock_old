@@ -1,12 +1,20 @@
 import sys
 
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication, QMainWindow, QMdiArea
 
-from MainWindow import MainWindow
+from Icon import Icon
+from Toolbar import Toolbar
 
 app = QApplication(sys.argv)
+main_win = QMainWindow()
+toolbar = Toolbar()
+toolbar.create_ui()
+mdi = QMdiArea()
+main_win.addToolBar(toolbar)
+main_win.setCentralWidget(mdi)
+main_win.setWindowIcon(Icon())
+main_win.setWindowTitle('Control dock 0.1.0')
+main_win.showMaximized()
 
 if __name__ == '__main__':
-    main_win = MainWindow()
-    main_win.showMaximized()
     sys.exit(app.exec_())
