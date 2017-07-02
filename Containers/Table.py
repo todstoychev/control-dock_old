@@ -18,7 +18,7 @@ class Table(QTableWidget):
         self.setColumnCount(self.__columns.__len__())
         self.setHorizontalHeaderLabels(self.__columns)
 
-    def set_data(self, show_all=True):
+    def set_data(self, show_all=False):
         containers = self.__docker.containers(all=show_all)
         self.setRowCount(containers.__len__())
         row = 0
@@ -57,3 +57,18 @@ class Table(QTableWidget):
                 ports_string += ', '
 
         return ports_string
+
+    def get_selected_containers_names(self):
+        """
+        Returns containers names from selected table rows.
+
+        :return list: List of selected containers names.
+        """
+        selection = self.selectedItems()
+        containers = []
+
+        for item in selection:
+            if item.column() is 2:
+                containers.append(item.text())
+
+        return containers

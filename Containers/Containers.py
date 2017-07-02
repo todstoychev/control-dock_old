@@ -1,5 +1,5 @@
-from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QCheckBox
+from PyQt5.QtCore import pyqtSlot, Qt
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QCheckBox, QApplication
 
 from Containers.Table import Table
 from Containers.Toolbar import Toolbar
@@ -8,10 +8,16 @@ from Icon import Icon
 
 
 class Containers(QWidget):
-    __toolbar = None
-    __table = None
-    __show_all = None
-    __commands = None
+    """
+    Containers widget.
+
+    Attributes:
+        :__toolbar (Toolbar): Widget toolbar.
+        :__table (Table): Containers list.
+        :__show_all (QCheckBox): Show all containers checkbox.
+        :__commands (Commands): Docker commands.
+        :__app (QApplication): Application instance.
+    """
 
     def __init__(self):
         super().__init__()
@@ -22,6 +28,7 @@ class Containers(QWidget):
         self.__table = Table()
         self.__show_all = QCheckBox()
         self.__commands = Commands()
+        self.__app = QApplication.instance()
 
     def create_ui(self):
         self.__show_all.setToolTip('Show all containers including stopped.')
@@ -37,20 +44,42 @@ class Containers(QWidget):
         self.setMinimumWidth(self.__table.width())
 
         self.__toolbar.start_action.triggered.connect(self.__on_start_action_clicked)
+        self.__toolbar.stop_action.triggered.connect(self.__on_stop_action_clicked)
+        self.__toolbar.restart_action.triggered.connect(self.__on_restart_action_clicked)
+        self.__toolbar.delete_action.triggered.connect(self.__on_delete_action_clicked)
         self.__show_all.clicked.connect(self.__on_show_all_clicked)
 
     @pyqtSlot()
     def __on_start_action_clicked(self):
-        selection = self.__table.selectedItems()
-
-        containers = []
-
-        for item in selection:
-            if item.column() is 2:
-                containers.append(item.text())
-
+        self.__app.setOverrideCursor(Qt.BusyCursor)
+        containers = self.__table.get_selected_containers_names()
         self.__commands.start_containers(containers)
         self.__table.set_data(self.__show_all.isChecked())
+        self.__app.restoreOverrideCursor()
+
+    @pyqtSlot()
+    def __on_stop_action_clicked(self):
+        self.__app.setOverrideCursor(Qt.BusyCursor)
+        containers = self.__table.get_selected_containers_names()
+        self.__commands.stop_containers(containers)
+        self.__table.set_data(self.__show_all.isChecked())
+        self.__app.restoreOverrideCursor()
+
+    @pyqtSlot()
+    def __on_restart_action_clicked(self):
+        self.__app.setOverrideCursor(Qt.BusyCursor)
+        containers = self.__table.get_selected_containers_names()
+        self.__commands.restart_containers(containers)
+        self.__table.set_data(self.__show_all.isChecked())
+        self.__app.restoreOverrideCursor()
+
+    @pyqtSlot()
+    def __on_delete_action_clicked(self):
+        self.__app.setOverrideCursor(Qt.BusyCursor)
+        containers = self.__table.get_selected_containers_names()
+        self.__commands.delete_containers(containers)
+        self.__table.set_data(self.__show_all.isChecked())
+        self.__app.restoreOverrideCursor()
 
     @pyqtSlot()
     def __on_show_all_clicked(self):
