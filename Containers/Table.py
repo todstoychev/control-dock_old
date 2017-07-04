@@ -1,28 +1,26 @@
 from datetime import datetime
 
-from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem, QAbstractItemView
+from PyQt5.QtWidgets import QAbstractItemView
 
-from Docker.DockerFactory import DockerFactory
+from BaseTable import BaseTable
 
 
-class Table(QTableWidget):
+class Table(BaseTable):
     """
     Attributes:
-       __docker (docker): Docker client instance.
        __columns (list): Column labels.
     """
 
     def __init__(self, *__args):
         super().__init__(*__args)
 
-        self.__docker = DockerFactory().create()
         self.__columns = ['Status', 'Name', 'Image', 'Command', 'Ports', 'Created']
 
         self.setColumnCount(self.__columns.__len__())
         self.setHorizontalHeaderLabels(self.__columns)
 
     def set_data(self, show_all=False):
-        containers = self.__docker.containers(all=show_all)
+        containers = self._docker.containers(all=show_all)
         self.setRowCount(containers.__len__())
         row = 0
 
@@ -42,13 +40,6 @@ class Table(QTableWidget):
         self.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.update()
 
-    def __set_row_data(self, data: list, row: int):
-        index = 0
-
-        for item in data:
-            self.setItem(row, index, QTableWidgetItem(item))
-            index += 1
-
     @staticmethod
     def __process_ports_dict(ports: list):
         ports_string = ''
@@ -60,18 +51,3 @@ class Table(QTableWidget):
                 ports_string += ', '
 
         return ports_string
-
-    def get_selected_containers_names(self):
-        """
-        Returns containers names from selected table rows.
-
-        :return list: List of selected containers names.
-        """
-        selection = self.selectedItems()
-        containers = []
-
-        for item in selection:
-            if item.column() is 2:
-                containers.append(item.text())
-
-        return containers

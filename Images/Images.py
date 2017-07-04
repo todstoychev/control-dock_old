@@ -1,3 +1,4 @@
+from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QWidget, QVBoxLayout
 
 from Icon import Icon
@@ -15,10 +16,13 @@ class Images(QWidget):
         self.__table = Table()
 
     def create_ui(self):
-        self.__toolbar.create_ui()
-
         self.layout().addWidget(self.__toolbar)
         self.layout().addWidget(self.__table)
 
+        self.__toolbar.create_ui()
         self.__table.set_data()
         self.setMinimumWidth(self.__table.width())
+
+    @pyqtSlot()
+    def __on_delete_action_clicked(self):
+        pass

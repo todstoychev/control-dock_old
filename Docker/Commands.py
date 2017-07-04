@@ -27,4 +27,3 @@ class Commands:
     def delete_containers(self, containers: list):
         for container_name in containers:
             self.__docker.remove_container(container_name, force=True)
-

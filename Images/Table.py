@@ -1,22 +1,21 @@
 from datetime import datetime
 
-from PyQt5.QtWidgets import QTableWidget, QAbstractItemView, QTableWidgetItem
+from PyQt5.QtWidgets import QAbstractItemView
 
-from Docker.DockerFactory import DockerFactory
+from BaseTable import BaseTable
 
 
-class Table(QTableWidget):
+class Table(BaseTable):
     def __init__(self, *__args):
         super().__init__(*__args)
 
-        self.__docker = DockerFactory().create()
         self.__columns = ['Repository', 'Id', 'Size', 'Created']
 
         self.setColumnCount(self.__columns.__len__())
         self.setHorizontalHeaderLabels(self.__columns)
 
     def set_data(self):
-        images = self.__docker.images()
+        images = self._docker.images()
         self.setRowCount(images.__len__())
         row = 0
 
@@ -43,10 +42,3 @@ class Table(QTableWidget):
         self.setSortingEnabled(True)
         self.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.update()
-
-    def __set_row_data(self, data: list, row: int):
-        index = 0
-
-        for item in data:
-            self.setItem(row, index, QTableWidgetItem(item))
-            index += 1
