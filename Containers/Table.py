@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem, QAbstractItemView
 
 from Docker.DockerFactory import DockerFactory
@@ -10,11 +12,12 @@ class Table(QTableWidget):
        __columns (list): Column labels.
     """
 
-    __docker = DockerFactory().create()
-    __columns = ['#', 'Status', 'Name', 'Image', 'Command', 'Ports', 'Created']
-
     def __init__(self, *__args):
         super().__init__(*__args)
+
+        self.__docker = DockerFactory().create()
+        self.__columns = ['Status', 'Name', 'Image', 'Command', 'Ports', 'Created']
+
         self.setColumnCount(self.__columns.__len__())
         self.setHorizontalHeaderLabels(self.__columns)
 
@@ -29,8 +32,8 @@ class Table(QTableWidget):
             image = container['Image']
             command = container['Command']
             ports = self.__process_ports_dict(container['Ports'])
-            created = container['Created']
-            data = ['', status, name, image, command, ports, created]
+            created = datetime.fromtimestamp(container['Created']).strftime("%d/%m/%Y - %H:%M:%S")
+            data = [status, name, image, command, ports, created]
             self.__set_row_data(data, row)
             row += 1
 
