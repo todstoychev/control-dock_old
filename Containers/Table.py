@@ -32,7 +32,7 @@ class Table(BaseTable):
             ports = self.__process_ports_dict(container['Ports'])
             created = datetime.fromtimestamp(container['Created']).strftime("%d/%m/%Y - %H:%M:%S")
             data = [status, name, image, command, ports, created]
-            self.__set_row_data(data, row)
+            self._set_row_data(data, row)
             row += 1
 
         self.resizeColumnsToContents()

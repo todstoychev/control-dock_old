@@ -35,7 +35,7 @@ class Table(BaseTable):
                 size,
                 created
             ]
-            self.__set_row_data(data, row)
+            self._set_row_data(data, row)
             row += 1
 
         self.resizeColumnsToContents()
