@@ -1,6 +1,7 @@
-from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import QWidget, QVBoxLayout
+from PyQt5.QtCore import pyqtSlot, Qt
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QApplication
 
+from Docker.Commands import Commands
 from Icon import Icon
 from Images.Table import Table
 from Images.Toolbar import Toolbar
@@ -14,6 +15,8 @@ class Images(QWidget):
         self.setLayout(QVBoxLayout())
         self.__toolbar = Toolbar()
         self.__table = Table()
+        self.__commands = Commands()
+        self.__app = QApplication.instance()
 
     def create_ui(self):
         self.layout().addWidget(self.__toolbar)
@@ -23,6 +26,15 @@ class Images(QWidget):
         self.__table.set_data()
         self.setMinimumWidth(self.__table.width())
 
+        self.__toolbar.delete_action.triggered.connect(self.__on_delete_action_clicked)
+
     @pyqtSlot()
     def __on_delete_action_clicked(self):
+        self.__app.setOverrideCursor(Qt.BusyCursor)
+        images = self.__table.get_selected_items_id(0)
+        self.__commands.delete_images(images)
+        self.__app.restoreOverrideCursor()
+
+    @pyqtSlot()
+    def __on_start_action_clicked(self):
         pass

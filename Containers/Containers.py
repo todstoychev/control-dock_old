@@ -52,7 +52,7 @@ class Containers(QWidget):
     @pyqtSlot()
     def __on_start_action_clicked(self):
         self.__app.setOverrideCursor(Qt.BusyCursor)
-        containers = self.__table.get_selected_containers_names()
+        containers = self.__table.get_selected_items_id(1)
         self.__commands.start_containers(containers)
         self.__table.set_data(self.__show_all.isChecked())
         self.__app.restoreOverrideCursor()
@@ -60,7 +60,7 @@ class Containers(QWidget):
     @pyqtSlot()
     def __on_stop_action_clicked(self):
         self.__app.setOverrideCursor(Qt.BusyCursor)
-        containers = self.__table.get_selected_containers_names()
+        containers = self.__table.get_selected_items_id(1)
         self.__commands.stop_containers(containers)
         self.__table.set_data(self.__show_all.isChecked())
         self.__app.restoreOverrideCursor()
@@ -68,7 +68,7 @@ class Containers(QWidget):
     @pyqtSlot()
     def __on_restart_action_clicked(self):
         self.__app.setOverrideCursor(Qt.BusyCursor)
-        containers = self.__table.get_selected_containers_names()
+        containers = self.__table.get_selected_items_id(1)
         self.__commands.restart_containers(containers)
         self.__table.set_data(self.__show_all.isChecked())
         self.__app.restoreOverrideCursor()
@@ -76,7 +76,7 @@ class Containers(QWidget):
     @pyqtSlot()
     def __on_delete_action_clicked(self):
         self.__app.setOverrideCursor(Qt.BusyCursor)
-        containers = self.__table.get_selected_containers_names()
+        containers = self.__table.get_selected_items_id(1)
         self.__commands.delete_containers(containers)
         self.__table.set_data(self.__show_all.isChecked())
         self.__app.restoreOverrideCursor()

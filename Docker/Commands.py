@@ -27,3 +27,7 @@ class Commands:
     def delete_containers(self, containers: list):
         for container_name in containers:
             self.__docker.remove_container(container_name, force=True)
+
+    def delete_images(self, images: list):
+        for image_name in images:
+            self.__docker.remove_image(image_name, True)
