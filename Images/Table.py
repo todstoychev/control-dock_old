@@ -2,7 +2,7 @@ from datetime import datetime
 
 from PyQt5.QtWidgets import QAbstractItemView
 
-from BaseTable import BaseTable
+from Core.BaseTable import BaseTable
 
 
 class Table(BaseTable):

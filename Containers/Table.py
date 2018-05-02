@@ -2,7 +2,7 @@ from datetime import datetime
 
 from PyQt5.QtWidgets import QAbstractItemView
 
-from BaseTable import BaseTable
+from Core.BaseTable import BaseTable
 
 
 class Table(BaseTable):
@@ -20,17 +20,17 @@ class Table(BaseTable):
         self.setHorizontalHeaderLabels(self.__columns)
 
     def set_data(self, show_all=False):
-        containers = self._docker.containers(all=show_all)
+        containers = self._docker.containers.list(all=show_all)
         self.setRowCount(containers.__len__())
         row = 0
 
         for container in containers:
-            status = container['Status']
-            name = container['Names'][0].replace('/', '')
-            image = container['Image']
-            command = container['Command']
-            ports = self.__process_ports_dict(container['Ports'])
-            created = datetime.fromtimestamp(container['Created']).strftime("%d/%m/%Y - %H:%M:%S")
+            status = container.status
+            name = container.name
+            image = container.image.tags[0]
+            command = container.attrs['Args'].__str__()
+            ports = self.__process_ports_dict(container.attrs['Config']['ExposedPorts'])
+            created = container.attrs['Created']
             data = [status, name, image, command, ports, created]
             self._set_row_data(data, row)
             row += 1
@@ -41,13 +41,10 @@ class Table(BaseTable):
         self.update()
 
     @staticmethod
-    def __process_ports_dict(ports: list):
+    def __process_ports_dict(ports: dict):
         ports_string = ''
 
-        for port in ports:
-            ports_string += port['Type'] + '/' + port['PrivatePort'].__str__()
-
-            if port is not ports[ports.__len__() - 1]:
-                ports_string += ', '
+        for port in list(ports.keys()):
+            ports_string += port+' '
 
         return ports_string

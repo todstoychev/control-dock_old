@@ -27,6 +27,7 @@ class BaseTable(QTableWidget):
         index = 0
 
         for item in data:
+            print(item)
             self.setItem(row, index, QTableWidgetItem(item))
             index += 1
 

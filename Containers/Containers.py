@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QWidget, QVBoxLayout, QCheckBox, QApplication
 from Containers.Table import Table
 from Containers.Toolbar import Toolbar
 from Docker.Commands import Commands
-from Icon import Icon
+from Core.Icon import Icon
 
 
 class Containers(QWidget):

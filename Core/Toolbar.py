@@ -1,5 +1,4 @@
 from functools import partial
-
 import qtawesome
 from PyQt5.QtCore import pyqtSlot, Qt
 from PyQt5.QtGui import QIcon

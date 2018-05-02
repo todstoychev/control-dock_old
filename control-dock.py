@@ -1,9 +1,17 @@
+# import docker as docker
+#
+# client = docker.from_env()
+# containers = client.containers.list(True)
+#
+# for container in containers:
+#     print(container.attrs['Created'])
+
 import sys
 
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMdiArea
 
-from Icon import Icon
-from Toolbar import Toolbar
+from Core.Icon import Icon
+from Core.Toolbar import Toolbar
 
 app = QApplication(sys.argv)
 main_win = QMainWindow()
