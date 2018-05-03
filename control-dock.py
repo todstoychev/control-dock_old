@@ -10,8 +10,8 @@ import sys
 
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMdiArea
 
-from Core.Icon import Icon
-from Core.Toolbar import Toolbar
+from Icon import Icon
+from Toolbar import Toolbar
 
 app = QApplication(sys.argv)
 main_win = QMainWindow()

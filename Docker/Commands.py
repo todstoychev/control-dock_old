@@ -1,3 +1,8 @@
+import subprocess
+import threading
+from concurrent.futures import thread
+from multiprocessing import Process
+
 from Docker.DockerFactory import DockerFactory
 
 
@@ -12,22 +17,31 @@ class Commands:
     def __init__(self):
         self.__docker = DockerFactory().create()
 
-    def start_containers(self, containers: list):
-        for container_name in containers:
-            self.__docker.start(container_name)
+    def start_containers(self, container_ids: list):
+        for container_id in container_ids:
+            self.__docker.containers.get(container_id).start()
 
-    def stop_containers(self, containers: list):
-        for container_name in containers:
-            self.__docker.stop(container_name)
+    def stop_containers(self, container_ids: list):
+        for container_id in container_ids:
+            self.__docker.containers.get(container_id).stop()
 
-    def restart_containers(self, containers: list):
-        for container_name in containers:
-            self.__docker.restart(container_name)
+    def restart_containers(self, container_ids: list):
+        for container_id in container_ids:
+            self.__docker.containers.get(container_id).restart()
 
     def delete_containers(self, containers: list):
         for container_name in containers:
-            self.__docker.remove_container(container_name, force=True)
+            self.__docker.containers.get(container_name).remove(force=True)
 
     def delete_images(self, images: list):
         for image_name in images:
             self.__docker.remove_image(image_name, True)
+
+    def open_terminal(self, container_ids: list):
+        for container_id in container_ids:
+            p = Process(target=self.__terminal_session, args=[container_id])
+            p.start()
+
+    @staticmethod
+    def __terminal_session(container_id: str):
+        subprocess.Popen(['x-terminal-emulator', '-e', 'docker', 'exec', '-it', container_id, 'sh'])

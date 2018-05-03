@@ -2,7 +2,7 @@ from PyQt5.QtCore import pyqtSlot, Qt
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QApplication
 
 from Docker.Commands import Commands
-from Core.Icon import Icon
+from Icon import Icon
 from Images.Table import Table
 from Images.Toolbar import Toolbar
 
