@@ -23,7 +23,7 @@ class Table(BaseTable):
         row = 0
 
         for container in containers:
-            id = container.id[0:10]
+            id = container.short_id
             status = container.status
             name = container.name
             image = container.image.tags[0]

@@ -1,6 +1,4 @@
 import subprocess
-import threading
-from concurrent.futures import thread
 from multiprocessing import Process
 
 from Docker.DockerFactory import DockerFactory
@@ -34,8 +32,8 @@ class Commands:
             self.__docker.containers.get(container_name).remove(force=True)
 
     def delete_images(self, images: list):
-        for image_name in images:
-            self.__docker.remove_image(image_name, True)
+        for image_id in images:
+            self.__docker.images.remove(image_id, force=True)
 
     def open_terminal(self, container_ids: list):
         for container_id in container_ids:

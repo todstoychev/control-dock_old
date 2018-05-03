@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from PyQt5.QtWidgets import QAbstractItemView
 
 from BaseTable import BaseTable
@@ -15,13 +13,13 @@ class Table(BaseTable):
         self.setHorizontalHeaderLabels(self.__columns)
 
     def set_data(self):
-        images = self._docker.images()
+        images = self._docker.images.list()
         self.setRowCount(images.__len__())
         row = 0
 
         for image in images:
-            created = datetime.fromtimestamp(image['Created']).strftime("%d/%m/%Y - %H:%M:%S")
-            size = ((image['Size'] / 1024) / 1024)
+            created = image.attrs['Created']
+            size = ((image.attrs['Size'] / 1024) / 1024)
 
             if size > 1000:
                 size = size / 1024
@@ -30,8 +28,8 @@ class Table(BaseTable):
                 size = round(size, 2).__str__() + 'MB'
 
             data = [
-                image['RepoTags'][0],
-                image['Id'],
+                image.tags.__str__(),
+                image.short_id.replace('sha256:', ''),
                 size,
                 created
             ]

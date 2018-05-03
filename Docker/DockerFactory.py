@@ -4,7 +4,7 @@ import docker
 class DockerFactory:
     """
     Attributes:
-        __docker docker: Docker client instance.
+        :__docker docker: Docker client instance.
     """
     __docker = None
 

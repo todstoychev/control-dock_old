@@ -3,6 +3,12 @@ from PyQt5.QtWidgets import QToolBar, QAction
 
 
 class Toolbar(QToolBar):
+    """
+    Attributes:
+        :__start_action (QAction):
+        :__delete_action (QAction):
+    """
+
     def __init__(self, *__args):
         super().__init__(*__args)
 

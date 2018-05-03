@@ -40,7 +40,6 @@ class Containers(QWidget):
         self.layout().addWidget(self.__toolbar)
         self.layout().addWidget(self.__table)
         self.layout().addWidget(self.__show_all)
-
         self.setMinimumWidth(self.__table.width())
 
         self.__toolbar.start_action.triggered.connect(self.__on_start_action_clicked)
