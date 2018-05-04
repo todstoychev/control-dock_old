@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QAbstractItemView
 
 from BaseTable import BaseTable
+from DateTimeFormatter import DateTimeFormatter
 
 
 class Table(BaseTable):
@@ -23,14 +24,14 @@ class Table(BaseTable):
         row = 0
 
         for container in containers:
-            id = container.short_id
+            container_id = container.short_id
             status = container.status
             name = container.name
             image = container.image.tags[0]
-            command = container.attrs['Args'].__str__()
+            command = self.__process_command(container.attrs['Config']['Cmd'])
             ports = self.__process_ports_dict(container.attrs['Config']['ExposedPorts'])
-            created = container.attrs['Created']
-            data = [id, name, status, image, command, ports, created]
+            created = DateTimeFormatter.format_string(container.attrs['Created'][0:-4], "%Y-%m-%dT%I:%M:%S.%f").strftime("%d.%m.%Y - %I:%m:%S")
+            data = [container_id, name, status, image, command, ports, created]
             self._set_row_data(data, row)
             row += 1
 
@@ -44,6 +45,17 @@ class Table(BaseTable):
         ports_string = ''
 
         for port in list(ports.keys()):
-            ports_string += port+' '
+            ports_string += port + ' '
 
         return ports_string
+
+    @staticmethod
+    def __process_command(command_list: list):
+        command = ''
+
+        if type(command_list).__name__ != 'NoneType':
+            for arg in command_list:
+                command += ' '+arg
+
+        return command
+

@@ -82,13 +82,13 @@ class Containers(QWidget):
         self.__app.restoreOverrideCursor()
 
     @pyqtSlot()
-    def __on_show_all_clicked(self):
-        checked = self.__show_all.isChecked()
-        self.__table.set_data(show_all=checked)
-
-    @pyqtSlot()
     def __on_terminal_action_clicked(self):
         self.__app.setOverrideCursor(Qt.BusyCursor)
         containers = self.__table.get_selected_items_id(0)
         self.__commands.open_terminal(containers)
         self.__app.restoreOverrideCursor()
+
+    @pyqtSlot()
+    def __on_show_all_clicked(self):
+        checked = self.__show_all.isChecked()
+        self.__table.set_data(show_all=checked)
